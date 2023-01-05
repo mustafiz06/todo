@@ -12,5 +12,5 @@ const DataSchema=mongoose.Schema({
 },{versionKey:false}
 );
 
-const ToDoListModel=mongoose.model('ToDoList',DataSchema);
+const ToDoListModel=mongoose.model('todolists',DataSchema);
 module.exports=ToDoListModel;

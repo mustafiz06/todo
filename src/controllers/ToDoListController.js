@@ -47,14 +47,18 @@ exports.ToDoSelect=(req,res)=>{
 
 //Update todolist...............Problem
 exports.UpdateToDo=(req,res)=>{
-    let ToDoSubject=req.body['ToDoSubject']
-    let ToDoDescription=  req.body['ToDoDescription']
-    let _id=  req.body['_id']
-    let ToDoUpdateDate=currentDate.toDateString();
+    //console.log(`Request Body : ${JSON.stringify(req.body)}`);
+    // let ToDoSubject=req.body['ToDoSubject']
+    // let ToDoDescription=  req.body['ToDoDescription']
+    // let _id=  req.body['_id']
+    // console.log(` Type of _ID : ${_id}`);
+    let {ToDoSubject, ToDoDescription,_id} = req.body;
+
+    let ToDoUpdateDate=new Date();
     let PostBody={
         ToDoSubject:ToDoSubject,
         ToDoDescription:ToDoDescription,
-        ToDoUpdateDate:ToDoUpdateDate,
+        ToDoUpdateDate:ToDoUpdateDate.toDateString(),
     }
 
     ToDoListModel.updateOne({_id:_id},{$set:PostBody},{upsert:true},(error,data)=>{
@@ -102,7 +106,9 @@ exports.SelectToDoByDate=(req,res)=>{
     let UserName=req.headers['username'];
     let FromDate=req.body['FromDate'];
     let ToDay=req.body['ToDay'];
-    ToDoListModel.find({UserName:UserName,ToDoCreateDate:{$gte:new Date(FromDate),$lte:new Date(ToDay)}},(error,data)=>{
+
+    console.log(`${UserName} = ${FromDate} = ${ToDay}`);
+    ToDoListModel.find({UserName:UserName,ToDoCreateDate:{$gte:FromDate,$lte:ToDay}},(error,data)=>{
         if(error){
             res.status(400).json({status:"fail to filter",data:error})
         }
